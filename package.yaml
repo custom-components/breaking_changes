@@ -1,0 +1,19 @@
+author:
+  email: ludeeus@gmail.com
+  homepage: https://github.com/ludeeus
+  name: ludeeus
+description: breaking_changes for custom_component developers.
+files:
+- custom_components/breaking_changes/__init__.py
+- custom_components/breaking_changes/binary_sensor.py
+- custom_components/breaking_changes/const.py
+- custom_components/breaking_changes/sensor.py
+keywords:
+- breaking_changes
+- homeassistant
+- home-assistant
+- custom-component
+- python
+license: MIT License
+name: breaking_changes
+type: component
