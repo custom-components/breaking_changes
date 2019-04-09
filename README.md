@@ -38,6 +38,7 @@ custom_components/breaking_changes/__init__.py
 custom_components/breaking_changes/binary_sensor.py
 custom_components/breaking_changes/const.py
 custom_components/breaking_changes/sensor.py
+custom_components/breaking_changes/manifest.json
 ```
 
 ## Example configuration.yaml
