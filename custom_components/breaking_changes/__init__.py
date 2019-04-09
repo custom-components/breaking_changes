@@ -53,7 +53,7 @@ async def async_setup(hass, config):
 
     # Create DATA dict
     hass.data[DOMAIN_DATA] = {}
-    hass.data[DOMAIN_DATA]['components'] = {}
+    hass.data[DOMAIN_DATA]["components"] = {}
 
     # Load platforms
     for platform in PLATFORMS:
@@ -66,12 +66,13 @@ async def async_setup(hass, config):
             )
         )
 
-    async def loaded_platforms():
+    async def loaded_platforms(hass):
         """Load platforms after HA startup."""
         hass.data[DOMAIN_DATA]["components"] = hass.config.components
         _LOGGER.debug("Loaded components %s", hass.data[DOMAIN_DATA]["components"])
+        await update_data(hass)
 
-    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_START, loaded_platforms())
+    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_START, loaded_platforms(hass))
 
     return True
 
