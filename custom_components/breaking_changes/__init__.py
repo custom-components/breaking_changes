@@ -5,12 +5,12 @@ For more details about this component, please refer to
 https://github.com/custom-components/breaking_changes
 """
 import os
-import sys
 from datetime import timedelta
 import logging
 import requests
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
+from homeassistant.const import EVENT_HOMEASSISTANT_START
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers import discovery
 from homeassistant.util import Throttle
@@ -64,6 +64,14 @@ async def async_setup(hass, config):
                 hass, platform, DOMAIN, platform_config, config
             )
         )
+
+    async def loaded_platforms():
+        """Load platforms after HA startup."""
+        hass.data[DOMAIN_DATA]["components"] = hass.config.components
+        _LOGGER.debug("Loaded components %s", hass.data[DOMAIN_DATA]["components"])
+
+    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_START, loaded_platforms())
+
     return True
 
 
@@ -74,15 +82,14 @@ async def update_data(hass):
 
     loaded_platforms = []
     loaded_platforms.append("homeassistant")
-    modules = sys.modules.keys()
-    for platform in modules:
+    for platform in hass.data[DOMAIN_DATA]["components"]:
         if "homeassistant.components." in platform:
             name = platform.split("homeassistant.components.")[1]
             if "." in name:
                 name = name.split(".")[0]
             if name not in loaded_platforms:
                 loaded_platforms.append(name)
-    _LOGGER.debug("Loaded platforms - %s", loaded_platforms)
+    _LOGGER.debug("Loaded components - %s", loaded_platforms)
 
     session = async_get_clientsession(hass)
     haversion = Version(hass.loop, session)
