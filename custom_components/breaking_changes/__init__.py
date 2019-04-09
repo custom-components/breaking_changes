@@ -53,6 +53,7 @@ async def async_setup(hass, config):
 
     # Create DATA dict
     hass.data[DOMAIN_DATA] = {}
+    hass.data[DOMAIN_DATA]['components'] = {}
 
     # Load platforms
     for platform in PLATFORMS:
