@@ -54,6 +54,7 @@ async def async_setup(hass, config):
     # Create DATA dict
     hass.data[DOMAIN_DATA] = {}
     hass.data[DOMAIN_DATA]["components"] = ["homeassistant"]
+    hass.data[DOMAIN_DATA]["potential"] = {}
 
     # Load platforms
     for platform in PLATFORMS:
@@ -72,7 +73,9 @@ async def async_setup(hass, config):
             hass.data[DOMAIN_DATA]["components"].append(component)
 
         _LOGGER.debug("Loaded components %s", hass.data[DOMAIN_DATA]["components"])
-        await update_data(hass, no_throttle=True)
+        await update_data(
+            hass, no_throttle=True
+        )  # pylint: disable=unexpected-keyword-arg
 
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_START, loaded_platforms(hass))
 
@@ -86,6 +89,25 @@ async def update_data(hass):
         return
     from pyhaversion import Version
 
+    session = async_get_clientsession(hass)
+    haversion = Version(hass.loop, session)
+
+    await haversion.get_local_version()
+    currentversion = haversion.version.split(".")[1]
+
+    await haversion.get_pypi_version()
+    remoteversion = haversion.version.split(".")[1]
+
+    if currentversion == remoteversion:
+        _LOGGER.debug(
+            "Current version is %s and remote version is %s skipping update",
+            currentversion,
+            remoteversion,
+        )
+        return
+
+    versions = []
+
     for platform in hass.data[DOMAIN_DATA]["components"]:
         if "homeassistant.components." in platform:
             name = platform.split("homeassistant.components.")[1]
@@ -95,32 +117,27 @@ async def update_data(hass):
                 hass.data[DOMAIN_DATA]["components"].append(name)
     _LOGGER.debug("Loaded components - %s", hass.data[DOMAIN_DATA]["components"])
 
-    session = async_get_clientsession(hass)
-    haversion = Version(hass.loop, session)
-    # This is where the main logic to update platform data goes.
     try:
         _LOGGER.debug("Running update")
-        await haversion.get_pypi_version()
-        remoteversion = haversion.version.split(".")[1]
 
-        request = requests.get(URL.format(remoteversion))
-        jsondata = request.json()
-        _LOGGER.debug(jsondata)
-        hass.data[DOMAIN_DATA]["potential"] = {}
-        hass.data[DOMAIN_DATA]["potential"]["version"] = "0.{}.0".format(remoteversion)
-        for platform in jsondata:
-            _LOGGER.debug(platform["component"])
-            if platform["component"] is None or platform["component"] is "None":
-                platform["component"] = "homeassistant"
-            if platform["component"] in hass.data[DOMAIN_DATA]["components"]:
-                data = {
-                    "component": platform["component"],
-                    "prlink": platform["prlink"],
-                    "doclink": platform["doclink"],
-                    "description": platform["description"],
-                }
-                hass.data[DOMAIN_DATA]["potential"][platform["pull_request"]] = data
-
+        for version in range(int(currentversion) + 1, int(remoteversion) + 1):
+            versions.append(version)
+            request = requests.get(URL.format(version))
+            jsondata = request.json()
+            _LOGGER.debug(jsondata)
+            for platform in jsondata:
+                _LOGGER.debug(platform["component"])
+                if platform["component"] is None or platform["component"] is "None":
+                    platform["component"] = "homeassistant"
+                if platform["component"] in hass.data[DOMAIN_DATA]["components"]:
+                    data = {
+                        "component": platform["component"],
+                        "prlink": platform["prlink"],
+                        "doclink": platform["doclink"],
+                        "description": platform["description"],
+                    }
+                    hass.data[DOMAIN_DATA]["potential"][platform["pull_request"]] = data
+        hass.data[DOMAIN_DATA]["potential"]["versions"] = versions
     except Exception as error:  # pylint: disable=broad-except
         _LOGGER.error("Could not update data - %s", error)
 
