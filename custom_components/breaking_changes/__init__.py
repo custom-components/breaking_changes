@@ -111,7 +111,6 @@ async def update_data(hass):
             if platform["component"] is None or platform["component"] is "None":
                 platform["component"] = "homeassistant"
             if platform["component"] in hass.data[DOMAIN_DATA]["components"]:
-                _LOGGER.debug("%s is in loaded", platform["component"])
                 data = {
                     "component": platform["component"],
                     "prlink": platform["prlink"],
@@ -119,8 +118,6 @@ async def update_data(hass):
                     "description": platform["description"],
                 }
                 hass.data[DOMAIN_DATA]["potential"][platform["pull_request"]] = data
-            else:
-                _LOGGER.debug("%s is not in loaded", platform["component"])
 
     except Exception as error:  # pylint: disable=broad-except
         _LOGGER.error("Could not update data - %s", error)
