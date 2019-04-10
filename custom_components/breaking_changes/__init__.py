@@ -29,7 +29,7 @@ from .const import (
 
 REQUIREMENTS = ["pyhaversion"]
 
-MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=5)
+MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=1)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -72,7 +72,7 @@ async def async_setup(hass, config):
             hass.data[DOMAIN_DATA]["components"].append(component)
 
         _LOGGER.debug("Loaded components %s", hass.data[DOMAIN_DATA]["components"])
-        await update_data(hass)
+        await update_data(hass, no_throttle=True)
 
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_START, loaded_platforms(hass))
 
@@ -82,6 +82,8 @@ async def async_setup(hass, config):
 @Throttle(MIN_TIME_BETWEEN_UPDATES)
 async def update_data(hass):
     """Update data."""
+    if len(hass.data[DOMAIN_DATA]["components"]) == 1:
+        return
     from pyhaversion import Version
 
     for platform in hass.data[DOMAIN_DATA]["components"]:

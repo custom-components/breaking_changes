@@ -1,7 +1,10 @@
 """Binary sensor platform for breaking_changes."""
+from datetime import timedelta
 from homeassistant.components.binary_sensor import BinarySensorDevice
 from . import update_data
 from .const import DOMAIN_DATA
+
+SCAN_INTERVAL = timedelta(seconds=10)
 
 
 async def async_setup_platform(

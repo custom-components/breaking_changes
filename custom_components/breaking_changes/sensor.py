@@ -1,7 +1,10 @@
 """Sensor platform for breaking_changes."""
+from datetime import timedelta
 from homeassistant.helpers.entity import Entity
 from . import update_data
 from .const import DOMAIN_DATA, ICON
+
+SCAN_INTERVAL = timedelta(seconds=10)
 
 
 async def async_setup_platform(
