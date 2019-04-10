@@ -53,7 +53,7 @@ async def async_setup(hass, config):
 
     # Create DATA dict
     hass.data[DOMAIN_DATA] = {}
-    hass.data[DOMAIN_DATA]["components"] = {}
+    hass.data[DOMAIN_DATA]["components"] = ["homeassistant"]
 
     # Load platforms
     for platform in PLATFORMS:
@@ -68,7 +68,9 @@ async def async_setup(hass, config):
 
     async def loaded_platforms(hass):
         """Load platforms after HA startup."""
-        hass.data[DOMAIN_DATA]["components"] = hass.config.components
+        for component in hass.config.components:
+            hass.data[DOMAIN_DATA]["components"].append(component)
+
         _LOGGER.debug("Loaded components %s", hass.data[DOMAIN_DATA]["components"])
         await update_data(hass)
 
@@ -82,21 +84,20 @@ async def update_data(hass):
     """Update data."""
     from pyhaversion import Version
 
-    loaded_platforms = []
-    loaded_platforms.append("homeassistant")
     for platform in hass.data[DOMAIN_DATA]["components"]:
         if "homeassistant.components." in platform:
             name = platform.split("homeassistant.components.")[1]
             if "." in name:
                 name = name.split(".")[0]
-            if name not in loaded_platforms:
-                loaded_platforms.append(name)
-    _LOGGER.debug("Loaded components - %s", loaded_platforms)
+            if name not in hass.data[DOMAIN_DATA]["components"]:
+                hass.data[DOMAIN_DATA]["components"].append(name)
+    _LOGGER.debug("Loaded components - %s", hass.data[DOMAIN_DATA]["components"])
 
     session = async_get_clientsession(hass)
     haversion = Version(hass.loop, session)
     # This is where the main logic to update platform data goes.
     try:
+        _LOGGER.debug("Running update")
         await haversion.get_pypi_version()
         remoteversion = haversion.version.split(".")[1]
 
@@ -109,7 +110,8 @@ async def update_data(hass):
             _LOGGER.debug(platform["component"])
             if platform["component"] is None or platform["component"] is "None":
                 platform["component"] = "homeassistant"
-            if platform["component"] in loaded_platforms:
+            if platform["component"] in hass.data[DOMAIN_DATA]["components"]:
+                _LOGGER.debug("%s is in loaded", platform["component"])
                 data = {
                     "component": platform["component"],
                     "prlink": platform["prlink"],
@@ -117,6 +119,8 @@ async def update_data(hass):
                     "description": platform["description"],
                 }
                 hass.data[DOMAIN_DATA]["potential"][platform["pull_request"]] = data
+            else:
+                _LOGGER.debug("%s is not in loaded", platform["component"])
 
     except Exception as error:  # pylint: disable=broad-except
         _LOGGER.error("Could not update data - %s", error)
