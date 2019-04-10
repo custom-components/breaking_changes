@@ -13,6 +13,13 @@
 
 _Component to show potential breaking_changes in the current published version based on your loaded components._
 
+## How it works.
+
+This uses [https://hachanges.halfdecent.io/](https://hachanges.halfdecent.io/) to get the breaking changes.  
+[`hachanges`][hachanges] is a website I made a couple of months before this to serve as an easy registry of breaking changes.  
+
+[`hachanges`][hachanges] uses web scraping on the blogpost for the release that it tries to show, and determine which breaking change to list.
+
 **This component will set up the following platforms.**
 
 Platform | Description
@@ -68,6 +75,7 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 [discord]: https://discord.gg/Qa5fW2R
 [discord-shield]: https://img.shields.io/discord/330944238910963714.svg?style=for-the-badge
 [exampleimg]: example.png
+[hachanges]: https://github.com/ludeeus/hachanges
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/
 [license-shield]: https://img.shields.io/github/license/custom-components/breaking_changes.svg?style=for-the-badge
