@@ -1,5 +1,4 @@
 [
-  "https://raw.githubusercontent.com/custom-components/breaking_changes/master/custom_components/breaking_changes/binary_sensor.py",
   "https://raw.githubusercontent.com/custom-components/breaking_changes/master/custom_components/breaking_changes/const.py",
   "https://raw.githubusercontent.com/custom-components/breaking_changes/master/custom_components/breaking_changes/sensor.py",
   "https://raw.githubusercontent.com/custom-components/breaking_changes/master/custom_components/breaking_changes/manifest.json"
