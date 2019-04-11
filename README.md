@@ -31,7 +31,6 @@ You run version `0.91.0`, and `0.92.0` is published, it will show breaking chang
 
 Platform | Description
 -- | --
-`binary_sensor` | Show a boolean value if there is a potential issue with your configuration before upgrading.
 `sensor` | Show info about potential issue with your configuration before upgrading.
 
 ![example][exampleimg]
@@ -49,7 +48,6 @@ Using your HA configuration directory (folder) as a starting point you should no
 
 ```text
 custom_components/breaking_changes/__init__.py
-custom_components/breaking_changes/binary_sensor.py
 custom_components/breaking_changes/const.py
 custom_components/breaking_changes/sensor.py
 custom_components/breaking_changes/manifest.json
