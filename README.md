@@ -59,7 +59,7 @@ custom_components/breaking_changes/manifest.json
 breaking_changes:
 ```
 
-## Configuration options
+## Configuration options 
 
 Key | Type | Required | Default | Description
 -- | -- | -- | -- | --
