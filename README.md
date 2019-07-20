@@ -2,7 +2,6 @@
 
 [![GitHub Release][releases-shield]][releases]
 [![GitHub Activity][commits-shield]][commits]
-[![custom_updater][customupdaterbadge]][customupdater]
 [![License][license-shield]](LICENSE.md)
 
 ![Project Maintenance][maintenance-shield]
@@ -11,20 +10,20 @@
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
 
-_Component to show potential breaking_changes in the current published version based on your loaded components._
+_Integration to show potential breaking_changes in the current published version based on your loaded components._
 
 ## How it works.
 
-This uses [https://hachanges.halfdecent.io/](https://hachanges.halfdecent.io/) to get the breaking changes.  
-[`hachanges`][hachanges] is a website I made a couple of months before this to serve as an easy registry of breaking changes.  
+This uses [https://hachanges.halfdecent.io/](https://hachanges.halfdecent.io/) to get the breaking changes.
+[`hachanges`][hachanges] is a website I made a couple of months before this to serve as an easy registry of breaking changes.
 
 [`hachanges`][hachanges] uses web scraping on the blogpost for the release that it tries to show, and determine which breaking change to list.
 
 This will list breaking changes on versions for the next after the one you are running up to the latest stable version.
 
-**Examples:**  
-You run version `0.87.0`, and `0.92.0` is published, it will show breaking changes for `0.88`, `0.89`, `0.90`, `0.91`, `0.92`.  
-You run version `0.92.0`, and `0.92.0` is published, it will not show anything.  
+**Examples:**
+You run version `0.87.0`, and `0.92.0` is published, it will show breaking changes for `0.88`, `0.89`, `0.90`, `0.91`, `0.92`.
+You run version `0.92.0`, and `0.92.0` is published, it will not show anything.
 You run version `0.91.0`, and `0.92.0` is published, it will show breaking changes for `0.92`.
 
 **This component will set up the following platforms.**
@@ -59,11 +58,12 @@ custom_components/breaking_changes/manifest.json
 breaking_changes:
 ```
 
-## Configuration options 
+## Configuration options
 
 Key | Type | Required | Default | Description
 -- | -- | -- | -- | --
 `name` | `string` | `False` | `Potential breaking changes` | Custom name for the entities.
+`scan_interval` | `int` | `False` | `60` | Seconds between updates.
 
 ## Contributions are welcome!
 
@@ -75,8 +75,6 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 [buymecoffeebadge]: https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg?style=for-the-badge
 [commits-shield]: https://img.shields.io/github/commit-activity/y/custom-components/breaking_changes.svg?style=for-the-badge
 [commits]: https://github.com/custom-components/breaking_changes/commits/master
-[customupdater]: https://github.com/custom-components/custom_updater
-[customupdaterbadge]: https://img.shields.io/badge/custom__updater-true-success.svg?style=for-the-badge
 [discord]: https://discord.gg/Qa5fW2R
 [discord-shield]: https://img.shields.io/discord/330944238910963714.svg?style=for-the-badge
 [exampleimg]: example.png

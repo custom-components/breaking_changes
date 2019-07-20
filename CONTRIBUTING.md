@@ -1,4 +1,8 @@
-# Contribution guidelines
+# Contributing
+
+[The easiest way to contribute is by using the devcontainer.](.devcontainer/README.md)
+
+## General guidelines
 
 Contributing to this project should be as easy and transparent as possible, whether it's:
 
@@ -24,7 +28,7 @@ In short, when you submit code changes, your submissions are understood to be un
 
 ## Report bugs using Github's [issues](../../issues)
 
-GitHub issues are used to track public bugs.  
+GitHub issues are used to track public bugs.
 Report a bug by [opening a new issue](../../issues/new/choose); it's that easy!
 
 ## Write bug reports with detail, background, and sample code
