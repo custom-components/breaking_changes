@@ -19,7 +19,7 @@ This uses [https://hachanges.halfdecent.io/](https://hachanges.halfdecent.io/) t
 
 [`hachanges`][hachanges] uses web scraping on the blogpost for the release that it tries to show, and determine which breaking change to list.
 
-This will list breaking changes on versions for the next after the one you are running up to the latest stable version.
+This will list breaking changes on versions for versions released after the one you are running up to the latest stable version.
 
 **Examples:**
 You run version `0.87.0`, and `0.92.0` is published, it will show breaking changes for `0.88`, `0.89`, `0.90`, `0.91`, `0.92`.
