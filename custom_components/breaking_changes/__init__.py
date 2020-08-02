@@ -141,7 +141,7 @@ async def update_data(hass, throttle):
             _LOGGER.debug(jsondata)
             for platform in jsondata:
                 _LOGGER.debug(platform["component"])
-                if platform["component"] is None or platform["component"] is "None":
+                if platform["component"] is None or platform["component"] == "None":
                     platform["component"] = "homeassistant"
                 if platform["component"] in hass.data[DOMAIN_DATA]["components"]:
                     data = {
