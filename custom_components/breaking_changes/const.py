@@ -30,4 +30,4 @@ CONF_SCAN_INTERVAL = "scan_interval"
 DEFAULT_NAME = "Potential breaking changes"
 
 # Interval in seconds
-INTERVAL = 10
+INTERVAL = 60
