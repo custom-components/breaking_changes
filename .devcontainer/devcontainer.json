@@ -1,23 +1,33 @@
-// See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
+	"name": "breaking_chanages -dev",
+	"image": "ludeeus/container:integration",
 	"context": "..",
-	"dockerFile": "Dockerfile",
-	"appPort": "8124:8123",
-	"runArgs": [
-		"-e",
-		"GIT_EDTIOR='code --wait'"
+	"postCreateCommand": "container install",
+	"appPort": [
+	  "9123:8123"
 	],
 	"extensions": [
-		"ms-python.python"
+	  "ms-python.python",
+	  "github.vscode-pull-request-github",
+	  "ryanluker.vscode-coverage-gutters",
+	  "ms-python.vscode-pylance"
 	],
 	"settings": {
-		"python.pythonPath": "/usr/local/bin/python",
-		"python.linting.pylintEnabled": true,
-		"python.linting.enabled": true,
-		"python.formatting.provider": "black",
-		"editor.formatOnPaste": false,
-		"editor.formatOnSave": true,
-		"editor.formatOnType": true,
-		"files.trimTrailingWhitespace": true
+	  "files.eol": "\n",
+	  "editor.tabSize": 4,
+	  "terminal.integrated.shell.linux": "/bin/bash",
+	  "python.pythonPath": "/usr/bin/python3",
+	  "python.analysis.autoSearchPaths": false,
+	  "python.linting.pylintEnabled": true,
+	  "python.linting.enabled": true,
+	  "python.linting.pylintArgs": [
+		"--disable",
+		"import-error"
+	  ],
+	  "python.formatting.provider": "black",
+	  "editor.formatOnPaste": false,
+	  "editor.formatOnSave": true,
+	  "editor.formatOnType": true,
+	  "files.trimTrailingWhitespace": true
 	}
-}
+  }

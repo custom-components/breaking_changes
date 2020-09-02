@@ -7,4 +7,3 @@ logger:
 
 
 breaking_changes:
-  scan_interval: 120
