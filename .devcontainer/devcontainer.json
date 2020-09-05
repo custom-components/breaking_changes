@@ -1,33 +1,33 @@
 {
-	"name": "breaking_chanages -dev",
+	"name": "breaking_chanages - dev",
 	"image": "ludeeus/container:integration",
 	"context": "..",
-	"postCreateCommand": "container install",
+	"postCreateCommand": "apk add jq && for req in $(jq -c -r '.requirements | .[]' custom_components/grocy/manifest.json); do python -m pip install '$req'; done && container install",
 	"appPort": [
-	  "9123:8123"
+		"9123:8123"
 	],
 	"extensions": [
-	  "ms-python.python",
-	  "github.vscode-pull-request-github",
-	  "ryanluker.vscode-coverage-gutters",
-	  "ms-python.vscode-pylance"
+		"ms-python.python",
+		"github.vscode-pull-request-github",
+		"ryanluker.vscode-coverage-gutters",
+		"ms-python.vscode-pylance"
 	],
 	"settings": {
-	  "files.eol": "\n",
-	  "editor.tabSize": 4,
-	  "terminal.integrated.shell.linux": "/bin/bash",
-	  "python.pythonPath": "/usr/bin/python3",
-	  "python.analysis.autoSearchPaths": false,
-	  "python.linting.pylintEnabled": true,
-	  "python.linting.enabled": true,
-	  "python.linting.pylintArgs": [
-		"--disable",
-		"import-error"
-	  ],
-	  "python.formatting.provider": "black",
-	  "editor.formatOnPaste": false,
-	  "editor.formatOnSave": true,
-	  "editor.formatOnType": true,
-	  "files.trimTrailingWhitespace": true
+		"files.eol": "\n",
+		"editor.tabSize": 4,
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"python.pythonPath": "/usr/bin/python3",
+		"python.analysis.autoSearchPaths": false,
+		"python.linting.pylintEnabled": true,
+		"python.linting.enabled": true,
+		"python.linting.pylintArgs": [
+			"--disable",
+			"import-error"
+		],
+		"python.formatting.provider": "black",
+		"editor.formatOnPaste": false,
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
+		"files.trimTrailingWhitespace": true
 	}
-  }
+}

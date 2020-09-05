@@ -14,7 +14,7 @@ _Integration to show potential breaking_changes in the current published version
 
 ## How it works.
 
-This uses [https://hachanges.halfdecent.io/](https://hachanges.halfdecent.io/) to get the breaking changes.
+This uses [https://hachanges.entrypoint.xyz/](https://hachanges.entrypoint.xyz/) to get the breaking changes.
 [`hachanges`][hachanges] is a website I made a couple of months before this to serve as an easy registry of breaking changes.
 
 [`hachanges`][hachanges] uses web scraping on the blogpost for the release that it tries to show, and determine which breaking change to list.
