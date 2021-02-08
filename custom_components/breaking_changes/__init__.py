@@ -12,7 +12,9 @@ import voluptuous as vol
 from homeassistant.helpers import discovery
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from integrationhelper import Throttle, WebClient
-from pyhaversion import LocalVersion, PyPiVersion
+from pyhaversion import HaVersion
+from pyhaversion.consts import HaVersionSource
+
 
 from .const import (
     CONF_NAME,
@@ -91,8 +93,8 @@ async def update_data(hass):
 
     session = async_get_clientsession(hass)
     webclient = WebClient(session)
-    localversion = LocalVersion(hass.loop, session)
-    pypiversion = PyPiVersion(hass.loop, session)
+    localversion = HaVersion(session=session, source=HaVersionSource.LOCAL)
+    pypiversion = HaVersion(session=session, source=HaVersionSource.PYPI)
     throttle.set_last_run()
 
     try:
