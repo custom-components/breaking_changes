@@ -87,7 +87,7 @@ async def update_data(hass):
     if throttle.throttle:
         return
 
-    integrations = set()
+    integrations = []
     changes = hass.data[DOMAIN_DATA]["potential"]["changes"]
 
     session = async_get_clientsession(hass)
@@ -117,7 +117,8 @@ async def update_data(hass):
     for integration in hass.config.components or []:
         if "." in integration:
             integration = integration.split(".")[0]
-        integrations.add(integration)
+        if integration not in integrations:
+            integrations.append(integration)
 
     _LOGGER.debug("Loaded integrations - %s", integrations)
 
@@ -142,8 +143,7 @@ async def update_data(hass):
     if hass.data[DOMAIN_DATA]["integrations"] != integrations:
         hass.data[DOMAIN_DATA]["potential"]["versions"] = set()
         changes = []
-    else:
-        hass.data[DOMAIN_DATA]["integrations"] = integrations
+    hass.data[DOMAIN_DATA]["integrations"] = integrations
 
     for version in request_versions:
         if version in hass.data[DOMAIN_DATA]["potential"]["versions"]:
