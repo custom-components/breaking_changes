@@ -17,7 +17,7 @@ If you have any issues with this you need to open an issue here:
 """
 
 # Operational
-URL = "https://hachanges.entrypoint.xyz/{0}"
+URL = "https://hachanges.entrypoint.xyz/v1/{0}"
 
 # Icons
 ICON = "mdi:package-up"
