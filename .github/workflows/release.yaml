@@ -36,7 +36,7 @@ jobs:
             && mv -f tmp ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json"
 
       - name: 👀 Validate data
-        run:
+        run: |
           if ! grep -q 'INTEGRATION_VERSION = "${{ steps.version.outputs.version }}"' ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/const.py; then
             echo "The version in custom_components/${{ steps.information.outputs.name }}/const.py was not correct"
             exit 1
