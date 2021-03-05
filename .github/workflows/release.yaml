@@ -39,11 +39,13 @@ jobs:
         run: |
           if ! grep -q 'INTEGRATION_VERSION = "${{ steps.version.outputs.version }}"' ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/const.py; then
             echo "The version in custom_components/${{ steps.information.outputs.name }}/const.py was not correct"
+            cat ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/const.py | grep INTEGRATION_VERSION
             exit 1
           fi
 
           if jq '.version | test("${{ steps.version.outputs.version }}")' ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json; then
             echo "The version in custom_components/${{ steps.information.outputs.name }}/manifest.json was not correct"
+            jq '.version' ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json
             exit 1
           fi
 
