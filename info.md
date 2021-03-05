@@ -21,4 +21,4 @@ breaking_changes:
 Key | Type | Required | Default | Description
 -- | -- | -- | -- | --
 `name` | `string` | `False` | `Potential breaking changes` | Custom name for the entities.
-`scan_interval` | `int` | `False` | `300` | Seconds between updates, minimum 300.
+`scan_interval` | `int` | `False` | `300` | Seconds between updates.

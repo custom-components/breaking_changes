@@ -2,17 +2,17 @@
 # Base component constants
 DOMAIN = "breaking_changes"
 DOMAIN_DATA = "{}_data".format(DOMAIN)
-VERSION = "0.5.0"
+INTEGRATION_VERSION = "master"
 PLATFORMS = ["sensor"]
 ISSUE_URL = "https://github.com/custom-components/breaking_changes/issues"
 
-STARTUP = """
+STARTUP = f"""
 -------------------------------------------------------------------
-{name}
-Version: {version}
+{DOMAIN}
+Version: {INTEGRATION_VERSION}
 This is a custom component
 If you have any issues with this you need to open an issue here:
-{issueurl}
+https://github.com/custom-components/breaking_changes/issues
 -------------------------------------------------------------------
 """
 

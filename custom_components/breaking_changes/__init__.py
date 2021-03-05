@@ -23,11 +23,9 @@ from .const import (
     DOMAIN,
     DOMAIN_DATA,
     INTERVAL,
-    ISSUE_URL,
     PLATFORMS,
     STARTUP,
     URL,
-    VERSION,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -51,24 +49,23 @@ async def async_setup(hass, config):
     """Set up this component."""
 
     # Print startup message
-    startup = STARTUP.format(name=DOMAIN, version=VERSION, issueurl=ISSUE_URL)
-    _LOGGER.info(startup)
+    _LOGGER.info(STARTUP)
 
     throttle = Throttle()
 
     # Create DATA dict
     hass.data[DOMAIN_DATA] = {}
     hass.data[DOMAIN_DATA]["throttle"] = throttle
-    hass.data[DOMAIN_DATA]["components"] = ["homeassistant"]
-    hass.data[DOMAIN_DATA]["potential"] = {}
+    hass.data[DOMAIN_DATA]["integrations"] = ["homeassistant"]
+    hass.data[DOMAIN_DATA]["potential"] = {
+        "changes": [],
+        "versions": set(),
+        "covered": set(),
+    }
 
     throttle.interval = timedelta(
         seconds=config[DOMAIN].get(CONF_SCAN_INTERVAL, INTERVAL)
     )
-
-    if throttle.interval.seconds < 300:
-        _LOGGER.critical("scan_interval is set to less than 300s, this is not allowed.")
-        return False
 
     # Load platforms
     for platform in PLATFORMS:
@@ -90,12 +87,8 @@ async def update_data(hass):
     if throttle.throttle:
         return
 
-    versions = set()
     integrations = set()
-    covered = set()
-    changes = []
-
-    hass.data[DOMAIN_DATA]["potential"] = {}
+    changes = hass.data[DOMAIN_DATA]["potential"]["changes"]
 
     session = async_get_clientsession(hass)
     webclient = WebClient(session)
@@ -126,7 +119,7 @@ async def update_data(hass):
             integration = integration.split(".")[0]
         integrations.add(integration)
 
-    _LOGGER.debug("Loaded components - %s", integrations)
+    _LOGGER.debug("Loaded integrations - %s", integrations)
 
     c_split = [int(x) for x in currentversion.split(".")]
     r_split = [int(x) for x in remoteversion.split(".")]
@@ -146,30 +139,33 @@ async def update_data(hass):
         _LOGGER.debug("no valid versions")
         return
 
+    if hass.data[DOMAIN_DATA]["integrations"] != integrations:
+        hass.data[DOMAIN_DATA]["potential"]["versions"] = set()
+        changes = []
+    else:
+        hass.data[DOMAIN_DATA]["integrations"] = integrations
+
     for version in request_versions:
+        if version in hass.data[DOMAIN_DATA]["potential"]["versions"]:
+            _LOGGER.debug("Allready have information for %s", version)
+            continue
         try:
             _LOGGER.debug("Checking breaking changes for %s", version)
             request = await webclient.async_get_json(URL.format(version))
 
             for change in request or []:
-                if change["pull"] in covered:
-                    continue
-
                 if change["integration"] in integrations:
                     data = {
                         "title": change["title"],
                         "integration": change["integration"],
                         "description": change["description"],
                     }
-
                     changes.append(data)
-                    covered.add(change["pull"])
 
-                    if version not in versions:
-                        versions.add(version)
+            if version not in hass.data[DOMAIN_DATA]["potential"]["versions"]:
+                hass.data[DOMAIN_DATA]["potential"]["versions"].add(version)
 
         except Exception as error:  # pylint: disable=broad-except
             _LOGGER.error("Could not update data - %s", error)
 
     hass.data[DOMAIN_DATA]["potential"]["changes"] = changes
-    hass.data[DOMAIN_DATA]["potential"]["versions"] = versions

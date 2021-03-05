@@ -1,0 +1,7 @@
+{
+    "name": "Breaking Changes",
+    "zip_release": true,
+    "hide_default_branch": true,
+    "filename": "breaking_changes.zip",
+    "domain": "breaking_changes"
+}

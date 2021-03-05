@@ -19,10 +19,12 @@ The webscraping is done in a [Cloudflare worker](https://workers.cloudflare.com/
 
 This will list breaking changes on versions for versions released after the one you are running up to the latest stable version.
 
+This will only list breaking changes in 2021.3 and newer.
+
 **Examples:**
-You run version `0.87.0`, and `0.92.0` is published, it will show breaking changes for `0.88`, `0.89`, `0.90`, `0.91`, `0.92`.
-You run version `0.92.0`, and `0.92.0` is published, it will not show anything.
-You run version `0.91.0`, and `0.92.0` is published, it will show breaking changes for `0.92`.
+You run version `2021.3.0`, and `2021.6.0` is published, it will show breaking changes for `2021.4`, `2021.5`, `2021.6`.
+You run version `2021.3.0`, and `2021.3.0` is published, it will not show anything.
+You run version `2021.3.0`, and `2021.4.0` is published, it will show breaking changes for `2021.4`.
 
 **This component will set up the following platforms.**
 
@@ -46,7 +48,7 @@ breaking_changes:
 Key | Type | Required | Default | Description
 -- | -- | -- | -- | --
 `name` | `string` | `False` | `Potential breaking changes` | Custom name for the entities.
-`scan_interval` | `int` | `False` | `300` | Seconds between updates, minimum 300.
+`scan_interval` | `int` | `False` | `300` | Seconds between updates.
 
 ## Contributions are welcome!
 
