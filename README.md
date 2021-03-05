@@ -14,10 +14,8 @@ _Integration to show potential breaking_changes in the current published version
 
 ## How it works.
 
-This uses [https://hachanges.entrypoint.xyz/](https://hachanges.entrypoint.xyz/) to get the breaking changes.
-[`hachanges`][hachanges] is a website I made a couple of months before this to serve as an easy registry of breaking changes.
-
-[`hachanges`][hachanges] uses web scraping on the blogpost for the release that it tries to show, and determine which breaking change to list.
+`hachanges` uses web scraping on the blogpost for the release that it tries to show, and determine which breaking change to list.
+The webscraping is done in a [Cloudflare worker](https://workers.cloudflare.com/) and served as a JSON API at https://hachanges.entrypoint.xyz/
 
 This will list breaking changes on versions for versions released after the one you are running up to the latest stable version.
 
@@ -32,25 +30,10 @@ Platform | Description
 -- | --
 `sensor` | Show info about potential issue with your configuration before upgrading.
 
-![example][exampleimg]
-
 ## Installation
 
-1. Using the tool of choice open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
-2. If you do not have a `custom_components` directory (folder) there, you need to create it.
-3. In the `custom_components` directory (folder) create a new folder called `breaking_changes`.
-4. Download _all_ the files from the `custom_components/breaking_changes/` directory (folder) in this repository.
-5. Place the files you downloaded in the new directory (folder) you created.
-6. Add `breaking_changes:` to your HA configuration.
-
-Using your HA configuration directory (folder) as a starting point you should now also have this:
-
-```text
-custom_components/breaking_changes/__init__.py
-custom_components/breaking_changes/const.py
-custom_components/breaking_changes/sensor.py
-custom_components/breaking_changes/manifest.json
-```
+1. Install with [HACS](https://hacs.xyz/)
+2. Add `breaking_changes:` to your HA configuration.
 
 ## Example configuration.yaml
 
@@ -63,7 +46,7 @@ breaking_changes:
 Key | Type | Required | Default | Description
 -- | -- | -- | -- | --
 `name` | `string` | `False` | `Potential breaking changes` | Custom name for the entities.
-`scan_interval` | `int` | `False` | `60` | Seconds between updates.
+`scan_interval` | `int` | `False` | `300` | Seconds between updates, minimum 300.
 
 ## Contributions are welcome!
 

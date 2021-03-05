@@ -1,9 +1,7 @@
 ## How it works.
 
-This uses [https://hachanges.halfdecent.io/](https://hachanges.halfdecent.io/) to get the breaking changes.
-[`hachanges`][hachanges] is a website I made a couple of months before this to serve as an easy registry of breaking changes.
-
-[`hachanges`][hachanges] uses web scraping on the blogpost for the release that it tries to show, and determine which breaking change to list.
+`hachanges` uses web scraping on the blogpost for the release that it tries to show, and determine which breaking change to list.
+The webscraping is done in a [Cloudflare worker](https://workers.cloudflare.com/) and served as a JSON API at https://hachanges.entrypoint.xyz/
 
 This will list breaking changes on versions for the next after the one you are running up to the latest stable version.
 
@@ -23,4 +21,4 @@ breaking_changes:
 Key | Type | Required | Default | Description
 -- | -- | -- | -- | --
 `name` | `string` | `False` | `Potential breaking changes` | Custom name for the entities.
-`scan_interval` | `int` | `False` | `60` | Seconds between updates.
+`scan_interval` | `int` | `False` | `300` | Seconds between updates, minimum 300.

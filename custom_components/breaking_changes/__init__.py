@@ -7,6 +7,8 @@ https://github.com/custom-components/breaking_changes
 import logging
 from datetime import timedelta
 
+from awesomeversion import AwesomeVersion
+
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.helpers import discovery
@@ -29,6 +31,8 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+MINIMUM_VERSION = AwesomeVersion("2021.3")
 
 CONFIG_SCHEMA = vol.Schema(
     {
@@ -61,6 +65,10 @@ async def async_setup(hass, config):
     throttle.interval = timedelta(
         seconds=config[DOMAIN].get(CONF_SCAN_INTERVAL, INTERVAL)
     )
+
+    if throttle.interval.seconds < 300:
+        _LOGGER.critical("scan_interval is set to less than 300s, this is not allowed.")
+        return False
 
     # Load platforms
     for platform in PLATFORMS:
@@ -97,15 +105,15 @@ async def update_data(hass):
 
     try:
         await localversion.get_version()
-        currentversion = localversion.version.split(".")[1]
+        currentversion = AwesomeVersion(localversion.version)
 
         await pypiversion.get_version()
-        remoteversion = pypiversion.version.split(".")[1]
+        remoteversion = AwesomeVersion(pypiversion.version)
     except Exception:  # pylint: disable=broad-except
         _LOGGER.warning("Could not get version data.")
         return
 
-    if currentversion == remoteversion:
+    if currentversion >= remoteversion:
         _LOGGER.debug(
             "Current version is %s and remote version is %s skipping update",
             currentversion,
@@ -120,33 +128,48 @@ async def update_data(hass):
 
     _LOGGER.debug("Loaded components - %s", integrations)
 
-    try:
-        _LOGGER.debug("Running update")
-        request = await webclient.async_get_json(
-            URL.format(currentversion, remoteversion)
-        )
-        _LOGGER.debug(request)
+    c_split = [int(x) for x in currentversion.split(".")]
+    r_split = [int(x) for x in remoteversion.split(".")]
 
-        for change in request or []:
-            if change["pull"] in covered:
-                continue
+    request_versions = []
+    if c_split[0] < r_split[0]:
+        for version in range(c_split[1] + 1, 13):
+            request_versions.append(f"{c_split[0]}.{version}")
+        for version in range(1, r_split[1] + 1):
+            request_versions.append(f"{r_split[0]}.{version}")
+    else:
+        for version in range(c_split[1] + 1, r_split[1] + 1):
+            request_versions.append(f"{r_split[0]}.{version}")
 
-            if change["integration"] in integrations:
-                data = {
-                    "title": change["title"],
-                    "integration": change["integration"],
-                    "prlink": change["prlink"],
-                    "doclink": change["doclink"],
-                    "description": change["description"],
-                }
+    request_versions = [x for x in request_versions if x >= MINIMUM_VERSION]
+    if len(request_versions) == 0:
+        _LOGGER.debug("no valid versions")
+        return
 
-                changes.append(data)
-                covered.add(change["pull"])
+    for version in request_versions:
+        try:
+            _LOGGER.debug("Checking breaking changes for %s", version)
+            request = await webclient.async_get_json(URL.format(version))
 
-                if change["homeassistant"] not in versions:
-                    versions.add(change["homeassistant"])
+            for change in request or []:
+                if change["pull"] in covered:
+                    continue
 
-        hass.data[DOMAIN_DATA]["potential"]["changes"] = changes
-        hass.data[DOMAIN_DATA]["potential"]["versions"] = versions
-    except Exception as error:  # pylint: disable=broad-except
-        _LOGGER.error("Could not update data - %s", error)
+                if change["integration"] in integrations:
+                    data = {
+                        "title": change["title"],
+                        "integration": change["integration"],
+                        "description": change["description"],
+                    }
+
+                    changes.append(data)
+                    covered.add(change["pull"])
+
+                    if version not in versions:
+                        versions.add(version)
+
+        except Exception as error:  # pylint: disable=broad-except
+            _LOGGER.error("Could not update data - %s", error)
+
+    hass.data[DOMAIN_DATA]["potential"]["changes"] = changes
+    hass.data[DOMAIN_DATA]["potential"]["versions"] = versions
