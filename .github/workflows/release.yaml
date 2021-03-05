@@ -32,7 +32,7 @@ jobs:
           sed -i '/INTEGRATION_VERSION = /c\INTEGRATION_VERSION = "${{ steps.version.outputs.version }}"' \
             "${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/const.py"
           jq '.version = "${{ steps.version.outputs.version }}"' \
-            ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json" > tmp \
+            "${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json" > tmp \
             && mv -f tmp ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json"
 
       - name: 👀 Validate data
