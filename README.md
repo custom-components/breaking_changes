@@ -15,7 +15,7 @@ _Integration to show potential breaking_changes in the current published version
 ## How it works.
 
 `hachanges` uses web scraping on the blogpost for the release that it tries to show, and determine which breaking change to list.
-The webscraping is done in a [Cloudflare worker](https://workers.cloudflare.com/) and served as a JSON API at https://hachanges.entrypoint.xyz/
+The webscraping is done in a [Cloudflare worker](https://workers.cloudflare.com/) and served as a JSON API at https://hachanges.entrypoint.xyz/v1/
 
 This will list breaking changes on versions for versions released after the one you are running up to the latest stable version.
 
