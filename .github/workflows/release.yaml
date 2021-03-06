@@ -43,8 +43,7 @@ jobs:
             exit 1
           fi
 
-          manifestversion=$(jq '.version' ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json)
-
+          manifestversion=$(jq -r '.version' ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json)
           if [ "$manifestversion" != "${{ steps.version.outputs.version }}" ]; then
             echo "The version in custom_components/${{ steps.information.outputs.name }}/manifest.json was not correct"
             echo "$manifestversion"
