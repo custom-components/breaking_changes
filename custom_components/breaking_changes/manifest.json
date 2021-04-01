@@ -12,5 +12,6 @@
   "codeowners": [
     "@ludeeus"
   ],
+  "homeassistant": "2021.4.0b0",
   "version": "0.0.0"
 }
