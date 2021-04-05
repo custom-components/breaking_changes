@@ -3,5 +3,6 @@
     "zip_release": true,
     "hide_default_branch": true,
     "filename": "breaking_changes.zip",
-    "domain": "breaking_changes"
+    "domain": "breaking_changes",
+    "homeassistant": "2021.4.0b0"
 }
