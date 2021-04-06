@@ -5,7 +5,6 @@
   "issue_tracker": "https://github.com/custom-components/breaking_changes/issues",
   "requirements": [
     "pyhaversion>=21.3.0",
-
     "integrationhelper>=0.2.2",
     "awesomeversion"
   ],
