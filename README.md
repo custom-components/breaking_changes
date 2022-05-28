@@ -1,6 +1,7 @@
-# breaking_changes
-
-[![GitHub Release][releases-shield]][releases]
+<details>
+  <summary>Old readme</summary>
+  
+  [![GitHub Release][releases-shield]][releases]
 [![GitHub Activity][commits-shield]][commits]
 [![License][license-shield]](LICENSE.md)
 
@@ -70,3 +71,7 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 [maintenance-shield]: https://img.shields.io/badge/maintainer-Joakim%20Sørensen%20%40ludeeus-blue.svg?style=for-the-badge
 [releases-shield]: https://img.shields.io/github/release/custom-components/breaking_changes.svg?style=for-the-badge
 [releases]: https://github.com/custom-components/breaking_changes/releases
+
+  
+</details>
+
