@@ -1,3 +1,5 @@
+At the time of archiving the integration has not worked in over a year.
+
 <details>
   <summary>Old readme</summary>
   
